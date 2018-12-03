@@ -1,0 +1,98 @@
+using System;
+using System.Security.Permissions;
+using Microsoft.SharePoint;
+using Microsoft.SharePoint.Utilities;
+using Microsoft.SharePoint.Workflow;
+
+namespace EventReceiver.EventReceiver1
+{
+    /// <summary>
+    /// List Item Events
+    /// </summary>
+    public class EventReceiver1 : SPItemEventReceiver
+    {
+        /// <summary>
+        /// An item is being updated.
+        /// </summary>
+        public override void ItemUpdating(SPItemEventProperties properties)
+        {
+           // if (properties.List.Title == "")
+            {
+                //base.ItemUpdating(properties);
+                using (SPWeb web = properties.OpenWeb())
+                {
+                    try
+                    {
+                        //System.Diagnostics.Debugger.Break();
+                        properties.BeforeProperties
+                            EventFiringEnabled = false;
+                        SPList list = web.Lists["DocumentLog"];
+                        SPListItem newItem = list.Items.Add();
+                        newItem["Title"] = properties.ListItem.Name;
+                        newItem["DateAndTime"] = System.DateTime.Now;
+                        newItem["Action"] = "Item Updated";
+                        newItem.Update();
+                        EventFiringEnabled = true;
+                        properties.ErrorMessage = "Eroor: Items are not available now.";
+                        properties.Cancel = true;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// An item was added.
+        /// </summary>
+        public override void ItemAdded(SPItemEventProperties properties)
+        {
+            //base.ItemAdded(properties);
+            using (SPWeb web = properties.OpenWeb())
+            {
+                try
+                {
+                    SPList list = web.Lists["DocumentLog"];
+                    SPListItem newItem = list.Items.Add();
+                    newItem["Title"] = properties.ListItem.Name;
+                    newItem["DateAndTime"] = System.DateTime.Now;
+                    newItem["Action"] = "Item Added";
+                    newItem.Update();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        /// <summary>
+        /// An item was deleted.
+        /// </summary>
+        public override void ItemDeleted(SPItemEventProperties properties)
+        {
+            //base.ItemDeleted(properties);
+            using (SPWeb web = properties.OpenWeb())
+            {
+                try
+                {
+                    SPList list = web.Lists["DocumentLog"];
+                    SPListItem newItem = list.Items.Add();
+                    newItem["Title"] = properties.ListItem.Name;
+                    newItem["DateAndTime"] = System.DateTime.Now;
+                    newItem["Action"] = "Item Deleted";
+                    newItem.Update();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+    }
+
+
+}
