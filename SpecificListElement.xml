@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <Receivers Scope="Web"  ListUrl="Lists/TestAnnouncements">
+      <Receiver>
+        <Name>EventReceiverSpecificListItemUpdating</Name>
+        <Type>ItemUpdating</Type>
+        <Assembly>$SharePoint.Project.AssemblyFullName$</Assembly>
+        <Class>EventReceiver.EventReceiverSpecificList.EventReceiverSpecificList</Class>
+        <SequenceNumber>10000</SequenceNumber>
+        <Synchronization></Synchronization>
+      </Receiver>
+  </Receivers>
+</Elements>
